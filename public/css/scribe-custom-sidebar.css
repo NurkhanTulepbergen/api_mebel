@@ -1,0 +1,31 @@
+.method-bg-get {
+    background-color: rgba(16, 185, 129, 0.1) !important; /* Green */
+}
+.method-bg-post {
+    background-color: rgba(59, 130, 246, 0.1) !important; /* Blue */
+}
+.method-bg-put {
+    background-color: rgba(234, 179, 8, 0.1) !important; /* Yellow */
+}
+.method-bg-delete {
+    background-color: rgba(239, 68, 68, 0.1) !important; /* Red */
+}
+.method-bg-patch {
+    background-color: rgba(168, 85, 247, 0.1) !important; /* Purple */
+}
+
+.method-bg-get:hover {
+    background-color: rgba(16, 185, 129, 0.3) !important;
+}
+.method-bg-post:hover {
+    background-color: rgba(59, 130, 246, 0.3) !important;
+}
+.method-bg-put:hover {
+    background-color: rgba(234, 179, 8, 0.3) !important;
+}
+.method-bg-delete:hover {
+    background-color: rgba(239, 68, 68, 0.3) !important;
+}
+.method-bg-patch:hover {
+    background-color: rgba(168, 85, 247, 0.3) !important;
+}

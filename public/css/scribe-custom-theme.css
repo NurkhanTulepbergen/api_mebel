@@ -1,0 +1,160 @@
+:root {
+    --color-background: #C96567;      /* основной фон страницы */
+    --color-sidebar: #9E5A63;         /* sidebar или вторичный фон */
+    --color-surface : #644E5B;         /* карточки, блоки, элементы */
+    --color-text: #F2F2F2;            /* основной текст (светлый) */
+    --color-muted: #cdd8e6 !important;            /* приглушённый текст */
+    --color-accent: #314455;          /* ссылки, иконки, активные элементы */
+    --color-hover: rgba(49, 68, 85, 0.25); /* hover эффект */
+    --color-get: rgba(151, 170, 189, 0.15);
+    --color-get-hover: rgba(151, 170, 189, 0.25);
+    --color-post: rgba(100, 78, 91, 0.15);
+    --color-post-hover: rgba(100, 78, 91, 0.25);
+    --color-delete: rgba(49, 68, 85, 0.15);
+    --color-delete-hover: rgba(49, 68, 85, 0.25);
+}
+
+body {
+    background-color: var(--color-background);
+    color: var(--color-text);
+}
+
+#sidebar {
+    background-color: var(--color-sidebar);
+    border-right: 1px solid var(--color-muted);
+}
+
+h1, h2, h3, h4 {
+    color: var(--color-text) !important;
+}
+
+a {
+    color: var(--color-text);
+    text-decoration: none;
+}
+
+a:hover {
+    color: var(--color-text);
+    background-color: var(--color-hover);
+}
+
+.method-bg-get {
+    background-color: var(--color-get);
+}
+.method-bg-get:hover {
+    background-color: var(--color-get-hover);
+}
+
+.method-bg-post {
+    background-color: var(--color-post);
+}
+.method-bg-post:hover {
+    background-color: var(--color-post-hover);
+}
+
+.method-bg-delete {
+    background-color: var(--color-delete);
+}
+.method-bg-delete:hover {
+    background-color: var(--color-delete-hover);
+}
+
+.sl-text-muted {
+    color: var(--color-muted);
+}
+
+.sl-border-t {
+    border-top: 1px solid var(--color-muted);
+}
+
+.custom-main-block {
+    background-color: var(--color-background);
+}
+
+.custom-sidebar-menu {
+    background-color: var(--color-sidebar);
+}
+
+.custom-menu-input {
+    background-color: var(--color-sidebar);
+}
+
+.custom-menu-input:hover {
+    background-color: var(--color-surface);
+}
+
+.custom-menu-input a{
+    color: var(--color-text) !important;
+}
+.custom-menu-input a:hover{
+    background-color: transparent !important;
+}
+
+aside {
+    background-color: var(--color-surface);
+}
+
+.custom-endpoint {
+    background-color: var(--color-sidebar);
+}
+
+.custom-params {
+    background-color: var(--color-sidebar);
+    padding: 15px;
+    border-radius: 10px;
+}
+
+.custom-border-none {
+    border: none !important;
+}
+
+.custom-require {
+    background-color: var(--color-accent);
+    color: var(--color-text);
+    border-radius: 5px;
+    padding: 10px;
+}
+
+.custom-example-variable {
+    color: var(--color-text);
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-sidebar);
+    padding: 5px;
+    border-radius: 3px;
+}
+
+.custom-example-request-header {
+    background-color: var(--color-surface);
+    padding: 5px;
+}
+
+.custom-example-request-header select {
+    background-color: var(--color-sidebar);
+    /* padding: 3px; */
+}
+
+.custom-sidebar-main {
+    border-right: 1px solid var(--color-surface) !important;
+}
+
+.custom-border-top {
+    border-top: 1px solid var(--color-surface) !important;
+}
+
+.hljs {
+    background-color: var(--color-accent);
+    color: var(--color-text);
+}
+
+.sl--ml-2 {
+    margin-left: 0 !important;
+}
+
+.custom-code-container {
+    background-color: var(--color-accent) !important;
+}
+
+.sl-py-1 {
+    padding-bottom: 0;
+    padding-top: 0;
+}

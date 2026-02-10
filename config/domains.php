@@ -1,0 +1,32 @@
+<?php
+return [
+    'jv' => [
+        'jv.de' => 'jvmoebel.de',
+        'jv.co.uk' => 'jvfurniture.co.uk',
+        'jv.ch' => 'jvmoebel.ch',
+        'jv.at' => 'jvmoebel.at',
+    ],
+    'xl' => [
+        'b2b.de' => 'moebelb2b.de',
+        'be' => 'xlmeubella.be',
+        'de' => 'xlmoebel.de',
+        'lu' => 'xlmoebel.lu',
+        'depotum.ch' => 'depotum.ch',
+        'xl.ie' => 'xlfurniture.ie',
+        'xl.gr' => 'xlhome.gr',
+        'xl.ro' => 'xlmobila.ro',
+        'xl.fi' => 'xlhuonekalut.fi',
+        'xl.pt' => 'xlmobiliario.pt',
+        'xl.se' => 'xlmobler.se',
+        'xl.sk' => 'xlnabytok.sk',
+        'xl.si' => 'xlposlovno.si',
+        'xl.dk' => 'xxlmobler.dk',
+        'turkey' => 'furniture-from-turkey.com',
+        'xl.co.uk' => 'xlfurniture.co.uk',
+        'xl.pl' => 'xlmeble.pl',
+        'xl.fr' => 'xlmeubles.fr',
+        'xl.at' => 'xlmoebel.at',
+        'xl.ch' => 'xlmoebel.ch',
+        'xl.cz' => 'xlnabytek.cz',
+    ],
+];
