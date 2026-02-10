@@ -1,66 +1,152 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# api-ruslan
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Laravel 12 API middleware для обмена данными между двумя e-commerce системами:
 
-## About Laravel
+- **OpenCart** (`/api/open-cart/*`)
+- **CosmoShop** (`/api/cosmo-shop/*`)
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+В проекте также есть:
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+- HTML документация API через **Scribe**: `/docs` (и `/docs.postman`, `/docs.openapi`)
+- Web-интерфейс для внутренних операций (массовое удаление, смена цен, картинки, SQL): `routes/web.php`
+- Админка на **Filament** (по умолчанию обычно `/admin`, если не переопределено)
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## Требования
 
-## Learning Laravel
+- PHP `^8.2`
+- Composer
+- Node.js + npm (для Vite, если нужен фронтенд/ассеты)
+- БД для самого приложения (пользователи, токены, очередь): по умолчанию `sqlite` (см. `.env.example`)
+- Redis (опционально, но используется для прогресса задач и некоторых эндпоинтов)
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+## Быстрый старт (локально)
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+```bash
+composer install
+cp .env.example .env
+php artisan key:generate
+php artisan migrate
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+npm install
+composer run dev
+```
 
-## Laravel Sponsors
+`composer run dev` запускает:
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+- `php artisan serve`, `php artisan queue:listen`, `php artisan pail`, `npm run dev` (Vite)
 
-### Premium Partners
+## Документация API
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+Если `config/scribe.php` не изменяли, документация доступна по:
 
-## Contributing
+- `GET /docs`
+- `GET /docs.postman`
+- `GET /docs.openapi`
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+Генерация документации:
 
-## Code of Conduct
+```bash
+php artisan scribe:generate
+```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+## Аутентификация
 
-## Security Vulnerabilities
+API использует **Laravel Sanctum** (Bearer token).
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+Публичные эндпоинты:
 
-## License
+- `POST /api/login`
+- `POST /api/refresh-token`
+- `POST /api/register`
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+Пример логина:
+
+```bash
+curl -s -X POST "$APP_URL/api/login" \
+  -H 'Accept: application/json' \
+  -H 'Content-Type: application/json' \
+  -d '{"email":"user@example.com","password":"secret"}'
+```
+
+Дальше для защищенных эндпоинтов добавляйте:
+
+- `Authorization: Bearer <access_token>`
+
+`access_token` в этом проекте имеет срок жизни 60 минут, после истечения токен удаляется middleware `CheckAccessTokenExpiration`.
+
+## Выбор магазина/БД (header `database`)
+
+Большинство бизнес-эндпоинтов требуют заголовок:
+
+- `database: <connection_name>`
+
+Значение должно входить в список `DB_ARRAY` (JSON-массив строк) и соответствовать именованному подключению в `config/database.php`.
+
+Пример:
+
+```bash
+curl -s "$APP_URL/api/open-cart/language" \
+  -H "Accept: application/json" \
+  -H "Authorization: Bearer $TOKEN" \
+  -H "database: xl.de"
+```
+
+Ограничения по доменам:
+
+- `OpenCart` эндпоинты ожидают `database`, в котором **нет** подстроки `jv`
+- `CosmoShop` эндпоинты ожидают `database`, в котором **есть** подстрока `jv`
+
+## Rate limit и логирование API
+
+- Rate limit: `50 req/sec` на IP (лимитер `request-limit`)
+- На API-запросы ставится `X-Request-ID` (если не передан, генерируется)
+- Логи API пишутся в `storage/logs/api/*.log`
+- `storage/logs/api/general.log`
+- `storage/logs/api/creation.log`
+- `storage/logs/api/update.log`
+- `storage/logs/api/deletion.log`
+- `storage/logs/api/errors.log`
+
+## Фоновые задачи (queue)
+
+Очередь по умолчанию `database` (см. `QUEUE_CONNECTION` в `.env.example`), поэтому важны миграции (`jobs`, `failed_jobs` и т.д.).
+
+Ручной запуск воркера:
+
+```bash
+php artisan queue:listen --tries=1
+```
+
+Статусы некоторых фоновых задач читаются из Redis:
+
+- `GET /api/mass-delete`
+- `GET /api/change-price`
+- `GET /api/images/{ean}`
+
+## Отправка логов в Telegram
+
+Эндпоинт:
+
+- `GET /api/send-logs`
+
+Ограничение: отправка возможна один раз в день (фиксируется в таблице `logs`).
+
+Нужно настроить переменные окружения:
+
+- `TELEGRAM_BOT_TOKEN`
+- `TELEGRAM_CHAT_ID`
+
+## Переменные окружения (помимо стандартных Laravel)
+
+- `DB_ARRAY`: JSON-массив допустимых имен подключений к магазинам, например `["xl.de","jv.de"]`
+- `SCRIBE_AUTH_TOKEN`: токен, который Scribe будет подставлять в примеры запросов
+- `TELEGRAM_BOT_TOKEN`, `TELEGRAM_CHAT_ID`: для `/api/send-logs`
+- `API_TOKEN`: статический токен для middleware `CheckAPIToken` (сейчас в `routes/api.php` он не включен)
+- `XLDE_TOKEN`: используется в `ShopDatabaseMiddleware` для некоторых обходных HTTP-вызовов под `xl.de`
+
+## Полезные ссылки внутри проекта
+
+- API роуты: `routes/api.php`, `routes/api/open-cart.php`, `routes/api/cosmo-shop.php`
+- Web роуты: `routes/web.php`
+- Конфиг Scribe: `config/scribe.php`
+- Миграции: `database/migrations/`
